@@ -21,6 +21,10 @@ blue_turn = 0
 # Grille de jeu
 grids = create_grids()
 
+# Choix des pseudonymes de la part des joueurs
+player_one_username = input('\n\033[41m Joueur 1 \033[0m - Choisissez votre pseudonyme: \n')
+player_two_username = input('\n\033[46m Joueur 2 \033[0m - Choisissez votre pseudonyme: \n')
+
 def clear ():
 
     """ 
@@ -92,7 +96,7 @@ def check_left_diagonal_strike(grids, pawn):
 
 def check_right_diagonal_strike(grids, pawn):
     """
-        Fonction qui permet de vérifier les pions en diagolane (côté droit)
+        Fonction qui permet de vérifier les pions en diagonale (côté droit)
     """
 
     for row in reversed(range(len(grids))): # Parcoure de façon inversé les grilles par 'row' pour obtenirs le bon ordre de calcule
@@ -142,26 +146,25 @@ def check_instance_of_grid (grids, grid, player, color, player_color):
     else:
         print(f"{player_color} {player} \033[0m - \033[31mVeuillez mettre un nombre valide, votre tour est passé !\033[0m")
 
-player_one_username = input('\n\033[41m Joueur 1 \033[0m - Choisissez votre pseudonyme: \n')
-player_two_username = input('\n\033[46m Joueur 2 \033[0m - Choisissez votre pseudonyme: \n')
-
 # On nettoie le screen
 clear()
 # Affiche la grille
 show_grids(grids)
-# Boucle à l'infini le jeux
 
+# Boucle à l'infini le jeux
 while not game_over:  
 
     # Essai du code
     try:
         if not game_over:
             # Tour du premier joueur
-            grid = input(f"\n\033[41m {player_one_username} \033[0m - Choisissez votre case: \n")
-            # On incrémente de 1 le nombre de coup joué
-            red_turn += 1
+            grid = input(f"\n\033[41m {player_one_username} \033[0m - Choisissez votre colonne (C): \n")
+            
             # On vérifie l'instance de la grille du joueur
             check_instance_of_grid(grids, int(grid), player_one_username, '🔴', '\033[41m')
+            
+            # On incrémente de 1 le nombre de coup joué
+            red_turn += 1
             
             # On vérifie toute les possibilités de victoire du joueur 1 
             if check_left_diagonal_strike(grids, '🔴') or check_right_diagonal_strike(grids, '🔴') or check_horizontal_strike(grids, '🔴') or  check_vertical_strike(grids, '🔴'):
@@ -170,17 +173,21 @@ while not game_over:
 
     # Renvoie une erreur en cas de problème
     except ValueError:
+        clear()
+        show_grids(grids)
         print(f"\n\033[41m\033[37m {player_one_username} \033[0m - \033[31mUn erreur c'est produite durant l'execution, votre tour est passé !\033[0m")
 
     # Essai du code
     try:
         if not game_over:
             # Tour du deuxième joueur
-            grid = input(f"\n\033[46m {player_two_username} \033[0m - Choisissez votre case: \n")
-            # On incrémente de 1 le nombre de coup joué
-            blue_turn += 1
+            grid = input(f"\n\033[46m {player_two_username} \033[0m - Choisissez votre colonne (C): \n")
+
             # On vérifie l'instance de la grille du joueur
             check_instance_of_grid(grids, int(grid), player_two_username, '🔵', '\033[46m')
+
+            # On incrémente de 1 le nombre de coup joué
+            blue_turn += 1
 
             # On vérifie toute les possibilités de victoire pour le joueur 2
             if check_left_diagonal_strike(grids, '🔵') or check_right_diagonal_strike(grids, '🔵') or check_horizontal_strike(grids, '🔵') or check_vertical_strike(grids, '🔵'):
@@ -189,4 +196,6 @@ while not game_over:
 
     # Renvoie une erreur en cas de problème
     except ValueError:
+        clear()
+        show_grids(grids)
         print(f"\n\033[46m\033[37m {player_two_username} \033[0m - \033[31mUn erreur c'est produite durant l'execution, votre tour est passé !\033[0m")
